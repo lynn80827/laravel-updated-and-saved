@@ -1,27 +1,56 @@
-## Laravel PHP Framework
+## Description
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+A demo code for my [medium article](https://medium.com/@lynn80827/laravel-eloquent-%E4%BA%8B%E4%BB%B6%E4%B8%AD%E7%9A%84-updated-%E5%92%8C-saved-%E5%8E%9F%E4%BE%86%E4%B8%8D%E4%B8%80%E6%A8%A3-caa8ef0ddbc). The repository is simple just to show the difference between laravel elqouent events `created` and `updatedAt`.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+```diff
+new file:   app/Observers/PostObserver.php
+new file:   app/Post.php
+modified:   app/Providers/AppServiceProvider.php
+```
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## Demo
 
-## Official Documentation
+### Case 1
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+```
+>>> App\Post::find(1)
+=> App\Post {
+     postId: 1,
+     title: "Consectetur corporis quam vitae qui suscipit cumque.",
+     summary: "Magnam recusandae voluptatem itaque officiis optio occaecati alias.",
+     content: "Voluptatum temporibus ab illum non qui rem quis. Non odio consequatur cumque iure eum.",
+     keywords: "sint",
+     pageview: 73,
+     publishedAt: null,
+     createdAt: "2017-05-05 07:06:59",
+     updatedAt: "2017-07-14 06:33:29",
+   }
+>>> App\Post::find(1)->update(['pageview' => 73])
+saved
+=> true
+>>> App\Post::find(1)->update(['pageview' => 74])
+updatedAt
+saved
+=> true
+```
 
-## Contributing
+### Case 2
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+```
+>>> App\Post::find(1)
+=> App\Post {
+     postId: 1,
+     title: "Consectetur corporis quam vitae qui suscipit cumque.",
+     summary: "Magnam recusandae voluptatem itaque officiis optio occaecati alias.",
+     content: "Voluptatum temporibus ab illum non qui rem quis. Non odio consequatur cumque iure eum.",
+     keywords: "sint",
+     pageview: 73,
+     publishedAt: null,
+     createdAt: "2017-05-05 07:06:59",
+     updatedAt: "2017-07-14 06:54:28",
+   }
+>>> App\Post::select(['postId', 'title'])->find(1)->update(['pageview' => 73])
+updatedAt
+saved
+=> true
+```
